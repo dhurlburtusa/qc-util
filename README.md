@@ -20,9 +20,11 @@ npm install npm -g
 ## Node Usage
 
 ```js
-import { Bool, Mth, Num, Obj, Str, typeOf } from 'qc-util';
+import { Arr, Bool, Dte, Mth, Num, Obj, Str, typeOf } from 'qc-util';
 
+Arr.wrap('item'); // ['item'].
 Bool.toBool('no'); // `Boolean('no')` returns `true` instead of `false`.
+Dte.toDate('7/12/2016', { formats: 'm/d/Y' }); // => new Date(2016, 6, 12).
 Num.toInt('1e4'); // `parseInt('1e4')` returns `1` instead of `10000`.
 Num.toInt('Infinity'); // `parseInt('Infinity')` returns `NaN` instead of `null`.
 Str.toStr(null); // `'' + null` returns `'null'` instead of `null`.
