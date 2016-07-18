@@ -130,7 +130,7 @@ tzOffsetLut = {
   300: {
     cdt: americaChicagoTz,
     "central daylight time": americaChicagoTz,
-    // "central standard time": americaChicagoTz,
+    "central standard time": americaChicagoTz, // This mapping is needed for FF 47 on Win 10 (other verions may be affected too.)
     // cst: americaChicagoTz,
     // edt: americaNewYorkTz,
     // "eastern daylight time": americaNewYorkTz,
@@ -217,15 +217,21 @@ function createDateFromArray(dateInfo, expectedTime, expectedTimezoneOffset) {
   return date;
 }
 
-function guessCurrentTimezone() {
+function guessCurrentTimezone(debug) {
   var now = new Date(),
       tz = null,
       tzAbbr, tzAbbrKey, tzAbbrLut, tzOffsetKey;
 
   tzOffsetKey = '' + now.getTimezoneOffset();
+  if (debug) {
+    console.log('tzOffsetKey: ' + tzOffsetKey);
+  }
   if (tzOffsetKey in tzOffsetLut) {
     tzAbbrLut = tzOffsetLut[tzOffsetKey];
     tzAbbr = _extractTzAbbrFrom(now);
+    if (debug) {
+      console.log('tzAbbr: ' + tzAbbr);
+    }
     if (tzAbbr) {
       tzAbbrKey = tzAbbr.toLowerCase();
       if (tzAbbrKey in tzAbbrLut) {
@@ -535,16 +541,14 @@ describe('QC.Dte', function () {
         // NOTE: DST Starts on March 13th at 02:00 in 2016
 
         // STD to DST
-        date = new Date(2016, 2, 12, 7);
-        expect(date.getTime()).toBe(1457787600000);
-        expect(date.getTimezoneOffset()).toBe(360);
+        date = createDateFromArray([2016, 2, 12, 9], 1457794800000, 360);
         date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1489320000000);
+        expect(date.getTime()).toBe(1489327200000);
         expect(date.getTimezoneOffset()).toBe(300);
         expect(date.getFullYear()).toBe(2017);
         expect(date.getMonth()).toBe(2);
         expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(7);
+        expect(date.getHours()).toBe(9);
         expect(date.getMinutes()).toBe(0);
         expect(date.getSeconds()).toBe(0);
         expect(date.getMilliseconds()).toBe(0);
