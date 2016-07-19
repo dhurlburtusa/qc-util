@@ -877,7 +877,7 @@ validateIndentation:
 # Option to check line break characters
 #
 # @type {Object|string}
-validateLineBreaks: CRLF
+validateLineBreaks: false
 
 # Requires each element in array on a single line when array length is more than passed maximum number or array fills more than one line.
 #
