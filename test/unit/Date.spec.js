@@ -28,13 +28,15 @@ Starts:               Ends:
 
 'use strict';
 
-var QC;
+var moment, QC;
 
 if (typeof require == 'function') {
   QC = require('../../');
+  moment = require('moment');
 }
 else {
   QC = global.QC;
+  moment = global.moment;
 }
 
 var Dte = QC.Dte;
@@ -7303,6 +7305,21 @@ describe('QC.Dte', function () {
       expect(Dte.convert(input, { def: undefined, strict: true })).toBeUndefined();
       expectToBeNow(Dte.convert(input, { def: 'now', strict: true }));
       expectToBeToday(Dte.convert(input, { def: 'today', strict: true }));
+    });
+
+    it('called with a moment instance input should return a date representing the same date/time as the moment instance', function () {
+      var date, input;
+
+      input = moment([2016, 6, 12, 12, 34, 56, 789]);
+      date = Dte.convert(input);
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(12);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
     });
 
     it('called with `"now"` input should return current date and time', function () {

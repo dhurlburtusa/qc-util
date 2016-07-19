@@ -6,6 +6,7 @@ module.exports = function (config) {
 
     files: [
       'etc/Number.isNaN.polyfill.js',
+      'etc/moment-2.14.1.js',
       'tmp/webpack/bundle.js',
       'test/unit/**/*.spec.js',
     ],
