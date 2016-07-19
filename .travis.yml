@@ -49,7 +49,7 @@ env:
     # - TZ=America/Juneau
     # - TZ=America/Kentucky/Louisville
     # - TZ=America/Kentucky/Monticello
-    # - TZ=America/Los_Angeles
+    - TZ=America/Los_Angeles
     # - TZ=America/Menominee
     # - TZ=America/Metlakatla
     # - TZ=America/New_York
