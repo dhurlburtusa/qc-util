@@ -16,7 +16,8 @@ node_js:
   # - "5.3"
   # - "5.1"
   # - "5.0"
-  - "4"
+  # 4.x fails due to lack of support for rest parameters.
+  # - "4"
   # - "4.4"
   # - "4.3"
   # - "4.2"
