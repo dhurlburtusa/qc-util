@@ -244,6 +244,34 @@ function guessCurrentTimezone(debug) {
   return tz;
 }
 
+function _addAndExpect(inputDateInfo, inputExpectedTime, inputExpectedTimezoneOffset, unit, increment, outputExpectedTimeInfo, outputExpectedTime, outputExpectedTimezoneOffset) {
+  var date, expectedDay, expectedHours, expectedMonth, expectedYear;
+
+  expectedYear = outputExpectedTimeInfo[0];
+  expectedMonth = outputExpectedTimeInfo[1];
+  expectedDay = outputExpectedTimeInfo[2] || 1;
+  expectedHours = outputExpectedTimeInfo[3] || 0;
+
+  date = createDateFromArray(inputDateInfo, inputExpectedTime, inputExpectedTimezoneOffset);
+  date = Dte.add(date, unit, increment);
+  expect(date.getTime()).toBe(outputExpectedTime);
+  expect(date.getTimezoneOffset()).toBe(outputExpectedTimezoneOffset);
+  expect(date.getFullYear()).toBe(expectedYear);
+  expect(date.getMonth()).toBe(expectedMonth);
+  expect(date.getDate()).toBe(expectedDay);
+  expect(date.getHours()).toBe(expectedHours);
+  expect(date.getMinutes()).toBe(0);
+  expect(date.getSeconds()).toBe(0);
+  expect(date.getMilliseconds()).toBe(0);
+}
+
+function _diffAndExpect(date1, date2, unit, expectedDiff) {
+  expect(Dte.diff(date1, date1, unit)).toBe(0);
+  expect(Dte.diff(date2, date2, unit)).toBe(0);
+  expect(Dte.diff(date1, date2, unit)).toBe(expectedDiff);
+  expect(Dte.diff(date2, date1, unit)).toBe(-expectedDiff);
+}
+
 function _extractTzAbbrFrom(dt) {
   var dtAsStr = dt.toString(),
       tzAbbr = null,
@@ -325,397 +353,127 @@ describe('QC.Dte', function () {
         // NOTE: DST Starts on March 9th at 02:00 in 2014
 
         // STD to DST
-        date = createDateFromArray([2014, 2, 8, 14], 1394316000000, 480);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1425848400000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2015);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(8);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 2, 8, 14], 1394316000000, 480, Dte.YEAR, 1, [2015, 2, 8, 14], 1425848400000, 420);
 
         // DST to STD
-        date = createDateFromArray([2014, 2, 12, 14], 1394658000000, 420);
-        date = Dte.add(date, Dte.YEAR, 2);
-        expect(date.getTime()).toBe(1457820000000);
-        expect(date.getTimezoneOffset()).toBe(480);
-        expect(date.getFullYear()).toBe(2016);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 2, 12, 14], 1394658000000, 420, Dte.YEAR, 2, [2016, 2, 12, 14], 1457820000000, 480);
 
         // NOTE: DST Ends on Nov 2nd at 02:00 in 2014
 
         // DST to STD
-        date = createDateFromArray([2014, 10, 1, 14], 1414875600000, 420);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1446415200000);
-        expect(date.getTimezoneOffset()).toBe(480);
-        expect(date.getFullYear()).toBe(2015);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(1);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 10, 1, 14], 1414875600000, 420, Dte.YEAR, 1, [2015, 10, 1, 14], 1446415200000, 480);
 
         // STD to DST
-        date = createDateFromArray([2014, 10, 2, 14], 1414965600000, 480);
-        date = Dte.add(date, Dte.YEAR, -3);
-        expect(date.getTime()).toBe(1320267600000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2011);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(2);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 10, 2, 14], 1414965600000, 480, Dte.YEAR, -3, [2011, 10, 2, 14], 1320267600000, 420);
 
         // NOTE: DST Starts on March 8th at 02:00 in 2015
 
         // DST to STD
-        date = createDateFromArray([2015, 2, 8, 14], 1425848400000, 420);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1394316000000);
-        expect(date.getTimezoneOffset()).toBe(480);
-        expect(date.getFullYear()).toBe(2014);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(8);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2015, 2, 8, 14], 1425848400000, 420, Dte.YEAR, -1, [2014, 2, 8, 14], 1394316000000, 480);
 
         // NOTE: DST Ends on Nov 1st at 02:00 in 2015
 
         // STD to DST
-        date = createDateFromArray([2015, 10, 1, 14], 1446415200000, 480);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1414875600000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2014);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(1);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2015, 10, 1, 14], 1446415200000, 480, Dte.YEAR, -1, [2014, 10, 1, 14], 1414875600000, 420);
 
         // NOTE: DST Starts on March 13th at 02:00 in 2016
 
         // STD to DST
-        date = createDateFromArray([2016, 2, 12, 14], 1457820000000, 480);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1489352400000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2017);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2016, 2, 12, 14], 1457820000000, 480, Dte.YEAR, 1, [2017, 2, 12, 14], 1489352400000, 420);
 
         // NOTE: DST Ends on Nov 6th at 02:00 in 2016
 
         // STD to DST
-        date = createDateFromArray([2016, 10, 6, 14], 1478469600000, 480);
-        date = Dte.add(date, Dte.YEAR, -6);
-        expect(date.getTime()).toBe(1289077200000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2010);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(6);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2016, 10, 6, 14], 1478469600000, 480, Dte.YEAR, -6, [2010, 10, 6, 14], 1289077200000, 420);
 
         // NOTE: DST Starts on March 12th at 02:00 in 2017
 
         // DST to STD
-        date = createDateFromArray([2017, 2, 12, 14], 1489352400000, 420);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1457820000000);
-        expect(date.getTimezoneOffset()).toBe(480);
-        expect(date.getFullYear()).toBe(2016);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(14);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2017, 2, 12, 14], 1489352400000, 420, Dte.YEAR, -1, [2016, 2, 12, 14], 1457820000000, 480);
       }
       else if (guessedTz.name == 'America/Denver') {
         // NOTE: DST Starts on March 9th at 02:00 in 2014
 
         // STD to DST
-        date = createDateFromArray([2014, 2, 8, 9], 1394294400000, 420);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1425826800000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2015);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(8);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 2, 8, 14], 1394312400000, 420, Dte.YEAR, 1, [2015, 2, 8, 14], 1425844800000, 360);
 
         // DST to STD
-        date = createDateFromArray([2014, 2, 12, 7], 1394629200000, 360);
-        date = Dte.add(date, Dte.YEAR, 2);
-        expect(date.getTime()).toBe(1457791200000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2016);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(7);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 2, 12, 14], 1394654400000, 360, Dte.YEAR, 2, [2016, 2, 12, 14], 1457816400000, 420);
 
         // NOTE: DST Ends on Nov 2nd at 02:00 in 2014
 
         // DST to STD
-        date = createDateFromArray([2014, 10, 1, 8], 1414850400000, 360);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1446390000000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2015);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(1);
-        expect(date.getHours()).toBe(8);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 10, 1, 14], 1414872000000, 360, Dte.YEAR, 1, [2015, 10, 1, 14], 1446411600000, 420);
 
         // STD to DST
-        date = createDateFromArray([2014, 10, 2, 9], 1414944000000, 420);
-        date = Dte.add(date, Dte.YEAR, -3);
-        expect(date.getTime()).toBe(1320246000000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2011);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(2);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 10, 2, 14], 1414962000000, 420, Dte.YEAR, -3, [2011, 10, 2, 14], 1320264000000, 360);
 
         // NOTE: DST Starts on March 8th at 02:00 in 2015
 
         // DST to STD
-        date = createDateFromArray([2015, 2, 8, 9], 1425826800000, 360);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1394294400000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2014);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(8);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2015, 2, 8, 14], 1425844800000, 360, Dte.YEAR, -1, [2014, 2, 8, 14], 1394312400000, 420);
 
         // NOTE: DST Ends on Nov 1st at 02:00 in 2015
 
         // STD to DST
-        date = createDateFromArray([2015, 10, 1, 9], 1446393600000, 420);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1414854000000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2014);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(1);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2015, 10, 1, 14], 1446411600000, 420, Dte.YEAR, -1, [2014, 10, 1, 14], 1414872000000, 360);
 
         // NOTE: DST Starts on March 13th at 02:00 in 2016
 
         // STD to DST
-        date = createDateFromArray([2016, 2, 12, 9], 1457798400000, 420);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1489330800000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2017);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2016, 2, 12, 14], 1457816400000, 420, Dte.YEAR, 1, [2017, 2, 12, 14], 1489348800000, 360);
 
         // NOTE: DST Ends on Nov 6th at 02:00 in 2016
 
         // STD to DST
-        date = createDateFromArray([2016, 10, 6, 9], 1478448000000, 420);
-        date = Dte.add(date, Dte.YEAR, -6);
-        expect(date.getTime()).toBe(1289055600000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2010);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(6);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2016, 10, 6, 14], 1478466000000, 420, Dte.YEAR, -6, [2010, 10, 6, 14], 1289073600000, 360);
 
         // NOTE: DST Starts on March 12th at 02:00 in 2017
 
         // DST to STD
-        date = createDateFromArray([2017, 2, 12, 9], 1489330800000, 360);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1457798400000);
-        expect(date.getTimezoneOffset()).toBe(420);
-        expect(date.getFullYear()).toBe(2016);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2017, 2, 12, 14], 1489348800000, 360, Dte.YEAR, -1, [2016, 2, 12, 14], 1457816400000, 420);
       }
       else if (guessedTz.name == 'America/Chicago') {
         // NOTE: DST Starts on March 9th at 02:00 in 2014
 
         // STD to DST
-        date = createDateFromArray([2014, 2, 8, 9], 1394290800000, 360);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1425823200000);
-        expect(date.getTimezoneOffset()).toBe(300);
-        expect(date.getFullYear()).toBe(2015);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(8);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 2, 8, 14], 1394308800000, 360, Dte.YEAR, 1, [2015, 2, 8, 14], 1425841200000, 300);
 
         // DST to STD
-        date = createDateFromArray([2014, 2, 12, 7], 1394625600000, 300);
-        date = Dte.add(date, Dte.YEAR, 2);
-        expect(date.getTime()).toBe(1457787600000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2016);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(7);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 2, 12, 14], 1394650800000, 300, Dte.YEAR, 2, [2016, 2, 12, 14], 1457812800000, 360);
 
         // NOTE: DST Ends on Nov 2nd at 02:00 in 2014
 
         // DST to STD
-        date = createDateFromArray([2014, 10, 1, 7], 1414843200000, 300);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1446382800000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2015);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(1);
-        expect(date.getHours()).toBe(7);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 10, 1, 14], 1414868400000, 300, Dte.YEAR, 1, [2015, 10, 1, 14], 1446408000000, 360);
 
         // STD to DST
-        date = createDateFromArray([2014, 10, 2, 9], 1414940400000, 360);
-        date = Dte.add(date, Dte.YEAR, -3);
-        expect(date.getTime()).toBe(1320242400000);
-        expect(date.getTimezoneOffset()).toBe(300);
-        expect(date.getFullYear()).toBe(2011);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(2);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2014, 10, 2, 14], 1414958400000, 360, Dte.YEAR, -3, [2011, 10, 2, 14], 1320260400000, 300);
 
         // NOTE: DST Starts on March 8th at 02:00 in 2015
 
         // DST to STD
-        date = createDateFromArray([2015, 2, 8, 9], 1425823200000, 300);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1394290800000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2014);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(8);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2015, 2, 8, 14], 1425841200000, 300, Dte.YEAR, -1, [2014, 2, 8, 14], 1394308800000, 360);
 
         // NOTE: DST Ends on Nov 1st at 02:00 in 2015
 
         // STD to DST
-        date = createDateFromArray([2015, 10, 1, 9], 1446390000000, 360);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1414850400000);
-        expect(date.getTimezoneOffset()).toBe(300);
-        expect(date.getFullYear()).toBe(2014);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(1);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2015, 10, 1, 14], 1446408000000, 360, Dte.YEAR, -1, [2014, 10, 1, 14], 1414868400000, 300);
 
         // NOTE: DST Starts on March 13th at 02:00 in 2016
 
         // STD to DST
-        date = createDateFromArray([2016, 2, 12, 9], 1457794800000, 360);
-        date = Dte.add(date, Dte.YEAR, 1);
-        expect(date.getTime()).toBe(1489327200000);
-        expect(date.getTimezoneOffset()).toBe(300);
-        expect(date.getFullYear()).toBe(2017);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2016, 2, 12, 14], 1457812800000, 360, Dte.YEAR, 1, [2017, 2, 12, 14], 1489345200000, 300);
 
         // NOTE: DST Ends on Nov 6th at 02:00 in 2016
 
         // STD to DST
-        date = createDateFromArray([2016, 10, 6, 9], 1478444400000, 360);
-        date = Dte.add(date, Dte.YEAR, -6);
-        expect(date.getTime()).toBe(1289052000000);
-        expect(date.getTimezoneOffset()).toBe(300);
-        expect(date.getFullYear()).toBe(2010);
-        expect(date.getMonth()).toBe(10);
-        expect(date.getDate()).toBe(6);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2016, 10, 6, 14], 1478462400000, 360, Dte.YEAR, -6, [2010, 10, 6, 14], 1289070000000, 300);
 
         // NOTE: DST Starts on March 12th at 02:00 in 2017
 
         // DST to STD
-        date = createDateFromArray([2017, 2, 12, 9], 1489327200000, 300);
-        date = Dte.add(date, Dte.YEAR, -1);
-        expect(date.getTime()).toBe(1457794800000);
-        expect(date.getTimezoneOffset()).toBe(360);
-        expect(date.getFullYear()).toBe(2016);
-        expect(date.getMonth()).toBe(2);
-        expect(date.getDate()).toBe(12);
-        expect(date.getHours()).toBe(9);
-        expect(date.getMinutes()).toBe(0);
-        expect(date.getSeconds()).toBe(0);
-        expect(date.getMilliseconds()).toBe(0);
+        _addAndExpect([2017, 2, 12, 14], 1489345200000, 300, Dte.YEAR, -1, [2016, 2, 12, 14], 1457812800000, 360);
       }
       else {
         expect(true).toBe(false);
@@ -7970,170 +7728,107 @@ describe('QC.Dte', function () {
       if (guessedTz.name == 'America/Los_Angeles') {
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946756801000, 480);
         date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978379201000, 480);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(60 * 24 * 366);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(60 * 24 * 366));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 60 * 24 * 366);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
         date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975700801000, 480); // After daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe((60 * 24 * 183) + 60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-((60 * 24 * 183) + 60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, (60 * 24 * 183) + 60);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(60 * 24 * 30);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(60 * 24 * 30));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 60 * 24 * 30);
 
         date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949435201000, 480); // Before daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe((60 * 24 * 151) + -60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-((60 * 24 * 151) + -60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, (60 * 24 * 151) + -60);
 
         // Due to daylight savings, one hour should be missing.
         // Daylight savings starts on March 14th in 2010.
         date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268553601000, 480);
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
         date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268600401000, 420);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(840 + -60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(840 + -60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 840 + -60);
 
         // Due to daylight savings, one more hour should have transpired.
         // Daylight savings ends on Nov 7th in 2010.
         date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289113200000, 420);
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
         date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289167200000, 480);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(840 + 60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(840 + 60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 840 + 60);
 
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946756800000, 480);
         date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946756919000, 480);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(1);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-1);
+        _diffAndExpect(date1, date2, Dte.MINUTES, 1);
       }
       else if (guessedTz.name == 'America/Denver') {
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946753201000, 420);
         date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978375601000, 420);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(60 * 24 * 366);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(60 * 24 * 366));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 60 * 24 * 366);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
         date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975697201000, 420); // After daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe((60 * 24 * 183) + 60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-((60 * 24 * 183) + 60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, (60 * 24 * 183) + 60);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(60 * 24 * 30);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(60 * 24 * 30));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 60 * 24 * 30);
 
         date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949431601000, 420); // Before daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe((60 * 24 * 151) + -60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-((60 * 24 * 151) + -60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, (60 * 24 * 151) + -60);
 
         // Due to daylight savings, one hour should be missing.
         // Daylight savings starts on March 14th in 2010.
         date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268550001000, 420);
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
-        date2 = createDateFromArray([2010, 2, 14, 9, 0, 1], 1268578801000, 360);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(540 + -60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(540 + -60));
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268596801000, 360);
+        _diffAndExpect(date1, date2, Dte.MINUTES, 840 + -60);
 
         // Due to daylight savings, one more hour should have transpired.
         // Daylight savings ends on Nov 7th in 2010.
         date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289109600000, 360);
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
-        date2 = createDateFromArray([2010, 10, 7, 8, 0, 0, 0], 1289142000000, 420);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(480 + 60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(480 + 60));
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289163600000, 420);
+        _diffAndExpect(date1, date2, Dte.MINUTES, 840 + 60);
 
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946753200000, 420);
         date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946753319000, 420);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(1);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-1);
+        _diffAndExpect(date1, date2, Dte.MINUTES, 1);
       }
       else if (guessedTz.name == 'America/Chicago') {
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946749601000, 360);
         date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978372001000, 360);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(60 * 24 * 366);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(60 * 24 * 366));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 60 * 24 * 366);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
         date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975693601000, 360); // After daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe((60 * 24 * 183) + 60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-((60 * 24 * 183) + 60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, (60 * 24 * 183) + 60);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(60 * 24 * 30);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(60 * 24 * 30));
+        _diffAndExpect(date1, date2, Dte.MINUTES, 60 * 24 * 30);
 
         date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949428001000, 360); // Before daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe((60 * 24 * 151) + -60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-((60 * 24 * 151) + -60));
+        _diffAndExpect(date1, date2, Dte.MINUTES, (60 * 24 * 151) + -60);
 
         // Due to daylight savings, one hour should be missing.
         // Daylight savings starts on March 14th in 2010.
         date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268546401000, 360);
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
-        date2 = createDateFromArray([2010, 2, 14, 9, 0, 1], 1268575201000, 300);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(540 + -60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(540 + -60));
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268593201000, 300);
+        _diffAndExpect(date1, date2, Dte.MINUTES, 840 + -60);
 
         // Due to daylight savings, one more hour should have transpired.
         // Daylight savings ends on Nov 7th in 2010.
         date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289106000000, 300);
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
-        date2 = createDateFromArray([2010, 10, 7, 8, 0, 0, 0], 1289138400000, 360);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(480 + 60);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-(480 + 60));
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289160000000, 360);
+        _diffAndExpect(date1, date2, Dte.MINUTES, 840 + 60);
 
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946749600000, 360);
         date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946749719000, 360);
-        expect(Dte.diff(date1, date1, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.MINUTES)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.MINUTES)).toBe(1);
-        expect(Dte.diff(date2, date1, Dte.MINUTES)).toBe(-1);
+        _diffAndExpect(date1, date2, Dte.MINUTES, 1);
       }
       // TODO: Add tests for other timezones.
       else {
@@ -8152,149 +7847,92 @@ describe('QC.Dte', function () {
       if (guessedTz.name == 'America/Los_Angeles') {
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946756801000, 480); // Before daylight savings.
         date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978379201000, 480); // Before daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(24 * 366);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-24 * 366);
+        _diffAndExpect(date1, date2, Dte.HOURS, 24 * 366);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
         date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975700801000, 480); // After daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe((24 * 183) + 1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-((24 * 183) + 1));
+        _diffAndExpect(date1, date2, Dte.HOURS, (24 * 183) + 1);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(24 * 30);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-24 * 30);
+        _diffAndExpect(date1, date2, Dte.HOURS, 24 * 30);
 
         date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949435201000, 480); // Before daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe((24 * 151) + -1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-((24 * 151) + -1));
+        _diffAndExpect(date1, date2, Dte.HOURS, (24 * 151) + -1);
 
         // Due to daylight savings, one hour should be missing.
         // Daylight savings starts on March 14th in 2010.
         date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268553601000, 480); // Before daylight savings.
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
         date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268600401000, 420); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(14 + -1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-(14 + -1));
+        _diffAndExpect(date1, date2, Dte.HOURS, 14 + -1);
 
         // Due to daylight savings, one more hour should have transpired.
         // Daylight savings ends on Nov 7th in 2010.
         date1 = createDateFromArray([2010, 10, 7, 0, 0, 1], 1289113201000, 420); // During daylight savings.
         date2 = createDateFromArray([2010, 10, 7, 14, 0, 1], 1289167201000, 480); // After daylight savings.
-        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(14 + 1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-(14 + 1));
+        _diffAndExpect(date1, date2, Dte.HOURS, 14 + 1);
       }
       else if (guessedTz.name == 'America/Denver') {
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946753201000, 420); // Before daylight savings.
         date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978375601000, 420); // Before daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(24 * 366);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-24 * 366);
+        _diffAndExpect(date1, date2, Dte.HOURS, 24 * 366);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
         date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975697201000, 420); // After daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe((24 * 183) + 1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-((24 * 183) + 1));
+        _diffAndExpect(date1, date2, Dte.HOURS, (24 * 183) + 1);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(24 * 30);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-24 * 30);
+        _diffAndExpect(date1, date2, Dte.HOURS, 24 * 30);
 
         date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949431601000, 420); // Before daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe((24 * 151) + -1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-((24 * 151) + -1));
+        _diffAndExpect(date1, date2, Dte.HOURS, (24 * 151) + -1);
 
         // Due to daylight savings, one hour should be missing.
         // Daylight savings starts on March 14th in 2010.
         date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268550001000, 420); // Before daylight savings.
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
         date2 = createDateFromArray([2010, 2, 14, 9, 0, 1], 1268578801000, 360); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(9 + -1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-(9 + -1));
+        _diffAndExpect(date1, date2, Dte.HOURS, 9 + -1);
 
         // Due to daylight savings, one more hour should have transpired.
         // Daylight savings ends on Nov 7th in 2010.
         date1 = createDateFromArray([2010, 10, 7, 0, 0, 1], 1289109601000, 360); // During daylight savings.
         date2 = createDateFromArray([2010, 10, 7, 8, 0, 1], 1289142001000, 420); // After daylight savings.
-        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(8 + 1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-(8 + 1));
+        _diffAndExpect(date1, date2, Dte.HOURS, 8 + 1);
       }
       else if (guessedTz.name == 'America/Chicago') {
         date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946749601000, 360); // Before daylight savings.
         date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978372001000, 360); // Before daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(24 * 366);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-24 * 366);
+        _diffAndExpect(date1, date2, Dte.HOURS, 24 * 366);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
         date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975693601000, 360); // After daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe((24 * 183) + 1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-((24 * 183) + 1));
+        _diffAndExpect(date1, date2, Dte.HOURS, (24 * 183) + 1);
 
         date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(24 * 30);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-24 * 30);
+        _diffAndExpect(date1, date2, Dte.HOURS, 24 * 30);
 
         date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949428001000, 360); // Before daylight savings.
         date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe((24 * 151) + -1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-((24 * 151) + -1));
+        _diffAndExpect(date1, date2, Dte.HOURS, (24 * 151) + -1);
 
         // Due to daylight savings, one hour should be missing.
         // Daylight savings starts on March 14th in 2010.
         date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268546401000, 360); // Before daylight savings.
         // NOTE: The following date was choosen such that Phantom JS will create it correctly.
         date2 = createDateFromArray([2010, 2, 14, 9, 0, 1], 1268575201000, 300); // During daylight savings.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(9 + -1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-(9 + -1));
+        _diffAndExpect(date1, date2, Dte.HOURS, 9 + -1);
 
         // Due to daylight savings, one more hour should have transpired.
         // Daylight savings ends on Nov 7th in 2010.
         date1 = createDateFromArray([2010, 10, 7, 0, 0, 1], 1289106001000, 300); // During daylight savings.
         date2 = createDateFromArray([2010, 10, 7, 8, 0, 1], 1289138401000, 360); // After daylight savings.
-        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
-        expect(Dte.diff(date1, date1, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date2, date2, Dte.HOURS)).toBe(0);
-        expect(Dte.diff(date1, date2, Dte.HOURS)).toBe(8 + 1);
-        expect(Dte.diff(date2, date1, Dte.HOURS)).toBe(-(8 + 1));
+        _diffAndExpect(date1, date2, Dte.HOURS, 8 + 1);
       }
       // TODO: Add tests for other timezones.
       else {
