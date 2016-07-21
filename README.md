@@ -52,3 +52,11 @@ the `undefined` value is treated the same as if the property wasn't defined at a
 JSON.stringify({ foo: undefined }); // `'{}'`
 JSON.stringify({ foo: null }); // `'{"foo":null}'`
 ```
+
+
+## Browser Usage
+
+ES2015 (aka ES6) features are used where supported by Node.  Since many browsers still don't support the
+same ES6 features that Node supports, the JavaScript source will need to be transpiled before using.
+The source is tested with Babel.  After transpiling, it is recommended that the transpiled source be bundled
+into a single file.  To test that the transpiled source runs correctly when bundled, Webpack is used.
