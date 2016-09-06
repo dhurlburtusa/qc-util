@@ -4863,7 +4863,7 @@ describe('QC.Dte', function () {
       expect(date.getMilliseconds()).toBe(789);
     });
 
-    it('called with an object literal input with no date information set should return the date with milliseconds, seconds, minutes, and hours set to 0 and with the current day, month, and year', function () {
+    it('called with a date-like array literal input with no date information set should return the date with milliseconds, seconds, minutes, and hours set to 0 and with the current day, month, and year', function () {
       var currDay, currMonth, currYear, date, input, now;
 
       now = new Date();
