@@ -1309,15 +1309,145 @@ describe('QC.Dte', function () {
     it('called with a complete date-like array literal input should return the date', function () {
       var date;
 
-      date = Dte.convert([1976, 3, 12, 3, 15, 45, 999], {});
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789], {});
       expect(date).toBeDefined();
-      expect(date.getFullYear()).toBe(1976);
-      expect(date.getMonth()).toBe(2);
-      expect(date.getDate()).toBe(12);
-      expect(date.getHours()).toBe(3);
-      expect(date.getMinutes()).toBe(15);
-      expect(date.getSeconds()).toBe(45);
-      expect(date.getMilliseconds()).toBe(999);
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(1);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, -420], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '-07:00'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '-0700'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '-07'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, 0], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, 'Z'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '+00:00'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '+0000'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '+00'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, 420], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '+07:00'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '+0700'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert([2016, 7, 1, 12, 34, 56, 789, '+07'], {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
     });
 
     it('called with a date-like array literal input missing the milliseconds should return the date with milliseconds set to 0', function () {
@@ -4990,6 +5120,136 @@ describe('QC.Dte', function () {
       expect(date.getMinutes()).toBe(34);
       expect(date.getSeconds()).toBe(56);
       expect(date.getMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: -420 }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '-07:00' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '-0700' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '-07' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(19);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: 0 }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: 'Z' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '+00:00' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '+0000' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '+00' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: 420 }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '+07:00' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '+0700' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789, tzo: '+07' }, {});
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(12);
+      expect(date.getUTCHours()).toBe(5);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
     });
 
     it('called with a date-like object literal input missing the milliseconds should return the date with milliseconds set to 0', function () {
@@ -7711,6 +7971,154 @@ describe('QC.Dte', function () {
       expect(date.getUTCMinutes()).toBe(0);
       expect(date.getUTCSeconds()).toBe(0);
       expect(date.getUTCMilliseconds()).toBe(0);
+    });
+
+    it('called with string input and `"O"` format should return expected date', function () {
+      var date;
+
+      date = Dte.convert('2016-07-01T12:34:56.789-0800', { formats: 'Y-m-d\\Th:i:s.uO' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789-08', { formats: 'Y-m-d\\Th:i:s.uO' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+0000', { formats: 'Y-m-d\\Th:i:s.uO' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+00', { formats: 'Y-m-d\\Th:i:s.uO' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789Z', { formats: 'Y-m-d\\Th:i:s.uO' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+0800', { formats: 'Y-m-d\\Th:i:s.uO' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(4);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+08', { formats: 'Y-m-d\\Th:i:s.uO' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(4);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+    });
+
+    it('called with string input and `"P"` format should return expected date', function () {
+      var date;
+
+      date = Dte.convert('2016-07-01T12:34:56.789-08:00', { formats: 'Y-m-d\\Th:i:s.uP' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789-08', { formats: 'Y-m-d\\Th:i:s.uP' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+00:00', { formats: 'Y-m-d\\Th:i:s.uP' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+00', { formats: 'Y-m-d\\Th:i:s.uP' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789Z', { formats: 'Y-m-d\\Th:i:s.uP' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(12);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+08:00', { formats: 'Y-m-d\\Th:i:s.uP' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(4);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-01T12:34:56.789+08', { formats: 'Y-m-d\\Th:i:s.uP' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(1);
+      expect(date.getUTCHours()).toBe(4);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
     });
 
   });
