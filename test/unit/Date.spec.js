@@ -7748,6 +7748,100 @@ describe('QC.Dte', function () {
       expect(date.getMilliseconds()).toBe(0);
     });
 
+    it('called with string input and a format containing `"u"` should return expected date', function () {
+      var date;
+
+      date = Dte.convert('2016-07-14T12:34:56.0', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(0);
+
+      date = Dte.convert('2016-07-14T12:34:56.7', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(700);
+
+      date = Dte.convert('2016-07-14T12:34:56.70', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(700);
+
+      date = Dte.convert('2016-07-14T12:34:56.78', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(780);
+
+      date = Dte.convert('2016-07-14T12:34:56.780', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(780);
+
+      date = Dte.convert('2016-07-14T12:34:56.789', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-14T12:34:56.7890', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
+
+      date = Dte.convert('2016-07-14T12:34:56.7895', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(790);
+
+      date = Dte.convert('2016-07-14T12:34:56.789012', { formats: 'Y-m-dTh:i:s.u' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(2016);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(14);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
+    });
+
     it('called with string input and format with no year info should return expected date', function () {
       var date, now;
 
