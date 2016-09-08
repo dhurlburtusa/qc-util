@@ -7822,7 +7822,7 @@ describe('QC.Dte', function () {
       expect(date.getMilliseconds()).toBe(789);
     });
 
-    it('called with string input, format, a strict set to true should return default value for invalid date', function () {
+    it('called with string input, format, and strict set to true should return default value for invalid date', function () {
       var date;
 
       // Confirm strict works with valid date/times.
