@@ -32,6 +32,7 @@ module.exports = function (config) {
 
     plugins: [
       'karma-chrome-launcher',
+      'karma-coverage',
       'karma-firefox-launcher',
       'karma-ie-launcher',
       'karma-jasmine',
@@ -39,10 +40,20 @@ module.exports = function (config) {
       'karma-phantomjs-launcher',
     ],
 
+    preprocessors: {
+      'tmp/webpack/bundle.js': ['coverage']
+    },
+
     // test results reporter to use
     // possible values: 'dots', 'kjhtml', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots', 'kjhtml'],
+    reporters: ['coverage', 'dots', 'kjhtml'],
+
+    // optionally, configure the reporter
+    coverageReporter: {
+      dir: 'coverage',
+      type: 'html'
+    },
 
     singleRun: true,
   });
