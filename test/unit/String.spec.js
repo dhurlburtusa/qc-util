@@ -98,6 +98,110 @@ describe('QC.Str', function () {
 
   });
 
+  describe('.cr', function () {
+
+    it('called with non-string input should return the non-string input', function () {
+      expect(Str.cr(undefined)).toBeUndefined();
+      expect(Str.cr(null)).toBeNull();
+      expect(Str.cr(0)).toBe(0);
+      expect(Str.cr(false)).toBe(false);
+    });
+
+    it('called with string input should return string normalized with CR', function () {
+      expect(Str.cr('')).toBe('');
+
+      expect(Str.cr('\r')).toBe('\r');
+      expect(Str.cr('\r\r')).toBe('\r\r');
+      expect(Str.cr('\n')).toBe('\r');
+      expect(Str.cr('\n\n')).toBe('\r\r');
+
+      expect(Str.cr('\nfoo')).toBe('\rfoo');
+      expect(Str.cr('\rfoo')).toBe('\rfoo');
+
+      expect(Str.cr('foo\n')).toBe('foo\r');
+      expect(Str.cr('foo\r')).toBe('foo\r');
+
+      expect(Str.cr('\nfoo\n')).toBe('\rfoo\r');
+      expect(Str.cr('\nfoo\r')).toBe('\rfoo\r');
+      expect(Str.cr('\rfoo\n')).toBe('\rfoo\r');
+      expect(Str.cr('\rfoo\r')).toBe('\rfoo\r');
+
+      expect(Str.cr('foo bar')).toBe('foo bar');
+      expect(Str.cr('foo bar')).toBe('foo bar');
+
+      expect(Str.cr('foo\nbar')).toBe('foo\rbar');
+      expect(Str.cr('foo\rbar')).toBe('foo\rbar');
+
+      expect(Str.cr('\nfoo\nbar')).toBe('\rfoo\rbar');
+      expect(Str.cr('\nfoo\rbar')).toBe('\rfoo\rbar');
+      expect(Str.cr('\rfoo\nbar')).toBe('\rfoo\rbar');
+      expect(Str.cr('\rfoo\rbar')).toBe('\rfoo\rbar');
+
+      expect(Str.cr('\nfoo\nbar\n')).toBe('\rfoo\rbar\r');
+      expect(Str.cr('\nfoo\nbar\r')).toBe('\rfoo\rbar\r');
+      expect(Str.cr('\nfoo\rbar\n')).toBe('\rfoo\rbar\r');
+      expect(Str.cr('\nfoo\rbar\r')).toBe('\rfoo\rbar\r');
+
+      expect(Str.cr('\rfoo\nbar\n')).toBe('\rfoo\rbar\r');
+      expect(Str.cr('\rfoo\nbar\r')).toBe('\rfoo\rbar\r');
+      expect(Str.cr('\rfoo\rbar\n')).toBe('\rfoo\rbar\r');
+      expect(Str.cr('\rfoo\rbar\r')).toBe('\rfoo\rbar\r');
+    });
+
+  });
+
+  describe('.crlf', function () {
+
+    it('called with non-string input should return the non-string input', function () {
+      expect(Str.crlf(undefined)).toBeUndefined();
+      expect(Str.crlf(null)).toBeNull();
+      expect(Str.crlf(0)).toBe(0);
+      expect(Str.crlf(false)).toBe(false);
+    });
+
+    it('called with string input should return string normalized with CRLF', function () {
+      expect(Str.crlf('')).toBe('');
+
+      expect(Str.crlf('\r')).toBe('\r\n');
+      expect(Str.crlf('\r\r')).toBe('\r\n\r\n');
+      expect(Str.crlf('\n')).toBe('\r\n');
+      expect(Str.crlf('\n\n')).toBe('\r\n\r\n');
+
+      expect(Str.crlf('\nfoo')).toBe('\r\nfoo');
+      expect(Str.crlf('\rfoo')).toBe('\r\nfoo');
+
+      expect(Str.crlf('foo\n')).toBe('foo\r\n');
+      expect(Str.crlf('foo\r')).toBe('foo\r\n');
+
+      expect(Str.crlf('\nfoo\n')).toBe('\r\nfoo\r\n');
+      expect(Str.crlf('\nfoo\r')).toBe('\r\nfoo\r\n');
+      expect(Str.crlf('\rfoo\n')).toBe('\r\nfoo\r\n');
+      expect(Str.crlf('\rfoo\r')).toBe('\r\nfoo\r\n');
+
+      expect(Str.crlf('foo bar')).toBe('foo bar');
+      expect(Str.crlf('foo bar')).toBe('foo bar');
+
+      expect(Str.crlf('foo\nbar')).toBe('foo\r\nbar');
+      expect(Str.crlf('foo\rbar')).toBe('foo\r\nbar');
+
+      expect(Str.crlf('\nfoo\nbar')).toBe('\r\nfoo\r\nbar');
+      expect(Str.crlf('\nfoo\rbar')).toBe('\r\nfoo\r\nbar');
+      expect(Str.crlf('\rfoo\nbar')).toBe('\r\nfoo\r\nbar');
+      expect(Str.crlf('\rfoo\rbar')).toBe('\r\nfoo\r\nbar');
+
+      expect(Str.crlf('\nfoo\nbar\n')).toBe('\r\nfoo\r\nbar\r\n');
+      expect(Str.crlf('\nfoo\nbar\r')).toBe('\r\nfoo\r\nbar\r\n');
+      expect(Str.crlf('\nfoo\rbar\n')).toBe('\r\nfoo\r\nbar\r\n');
+      expect(Str.crlf('\nfoo\rbar\r')).toBe('\r\nfoo\r\nbar\r\n');
+
+      expect(Str.crlf('\rfoo\nbar\n')).toBe('\r\nfoo\r\nbar\r\n');
+      expect(Str.crlf('\rfoo\nbar\r')).toBe('\r\nfoo\r\nbar\r\n');
+      expect(Str.crlf('\rfoo\rbar\n')).toBe('\r\nfoo\r\nbar\r\n');
+      expect(Str.crlf('\rfoo\rbar\r')).toBe('\r\nfoo\r\nbar\r\n');
+    });
+
+  });
+
   describe('.escape', function () {
 
     it('called with `undefined` should return `undefined`', function () {
@@ -225,6 +329,58 @@ describe('QC.Str', function () {
     it('called with short length should return input unchanged', function () {
       var output = Str.leftPad('foobar', 5, ' ');
       expect(output).toBe('foobar');
+    });
+
+  });
+
+  describe('.lf', function () {
+
+    it('called with non-string input should return the non-string input', function () {
+      expect(Str.lf(undefined)).toBeUndefined();
+      expect(Str.lf(null)).toBeNull();
+      expect(Str.lf(0)).toBe(0);
+      expect(Str.lf(false)).toBe(false);
+    });
+
+    it('called with string input should return string normalized with LF', function () {
+      expect(Str.lf('')).toBe('');
+
+      expect(Str.lf('\r')).toBe('\n');
+      expect(Str.lf('\r\r')).toBe('\n\n');
+      expect(Str.lf('\n')).toBe('\n');
+      expect(Str.lf('\n\n')).toBe('\n\n');
+
+      expect(Str.lf('\nfoo')).toBe('\nfoo');
+      expect(Str.lf('\rfoo')).toBe('\nfoo');
+
+      expect(Str.lf('foo\n')).toBe('foo\n');
+      expect(Str.lf('foo\r')).toBe('foo\n');
+
+      expect(Str.lf('\nfoo\n')).toBe('\nfoo\n');
+      expect(Str.lf('\nfoo\r')).toBe('\nfoo\n');
+      expect(Str.lf('\rfoo\n')).toBe('\nfoo\n');
+      expect(Str.lf('\rfoo\r')).toBe('\nfoo\n');
+
+      expect(Str.lf('foo bar')).toBe('foo bar');
+      expect(Str.lf('foo bar')).toBe('foo bar');
+
+      expect(Str.lf('foo\nbar')).toBe('foo\nbar');
+      expect(Str.lf('foo\rbar')).toBe('foo\nbar');
+
+      expect(Str.lf('\nfoo\nbar')).toBe('\nfoo\nbar');
+      expect(Str.lf('\nfoo\rbar')).toBe('\nfoo\nbar');
+      expect(Str.lf('\rfoo\nbar')).toBe('\nfoo\nbar');
+      expect(Str.lf('\rfoo\rbar')).toBe('\nfoo\nbar');
+
+      expect(Str.lf('\nfoo\nbar\n')).toBe('\nfoo\nbar\n');
+      expect(Str.lf('\nfoo\nbar\r')).toBe('\nfoo\nbar\n');
+      expect(Str.lf('\nfoo\rbar\n')).toBe('\nfoo\nbar\n');
+      expect(Str.lf('\nfoo\rbar\r')).toBe('\nfoo\nbar\n');
+
+      expect(Str.lf('\rfoo\nbar\n')).toBe('\nfoo\nbar\n');
+      expect(Str.lf('\rfoo\nbar\r')).toBe('\nfoo\nbar\n');
+      expect(Str.lf('\rfoo\rbar\n')).toBe('\nfoo\nbar\n');
+      expect(Str.lf('\rfoo\rbar\r')).toBe('\nfoo\nbar\n');
     });
 
   });
