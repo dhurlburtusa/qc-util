@@ -1139,6 +1139,26 @@ describe('QC.Dte', function () {
 
   describe('.clearTime', function () {
 
+    it('should just return input when not a `Date` instance', function () {
+      var input, output;
+
+      input = undefined;
+      output = Dte.clearTime(input);
+      expect(output).toBe(input);
+
+      input = null;
+      output = Dte.clearTime(input);
+      expect(output).toBe(input);
+
+      input = 0;
+      output = Dte.clearTime(input);
+      expect(output).toBe(input);
+
+      input = '';
+      output = Dte.clearTime(input);
+      expect(output).toBe(input);
+    });
+
     it('should clear the time', function () {
       var date, dt, y, m, d, h, i;
 
@@ -1308,6 +1328,26 @@ describe('QC.Dte', function () {
 
     it('called with a complete date-like array literal input should return the date', function () {
       var date;
+
+      date = Dte.convert([99, 7, 1, 12, 34, 56, 789], {});
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(99);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(1);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
+
+      date = Dte.convert([100, 7, 1, 12, 34, 56, 789], {});
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(100);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(1);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
 
       date = Dte.convert([2016, 7, 1, 12, 34, 56, 789], {});
       expect(date).toBeDefined();
@@ -5111,6 +5151,26 @@ describe('QC.Dte', function () {
     it('called with a complete date-like object literal input should return the date', function () {
       var date;
 
+      date = Dte.convert({ year: 99, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789 }, {});
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(99);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(12);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
+
+      date = Dte.convert({ year: 100, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789 }, {});
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(100);
+      expect(date.getMonth()).toBe(6);
+      expect(date.getDate()).toBe(12);
+      expect(date.getHours()).toBe(12);
+      expect(date.getMinutes()).toBe(34);
+      expect(date.getSeconds()).toBe(56);
+      expect(date.getMilliseconds()).toBe(789);
+
       date = Dte.convert({ year: 2016, month: 7, day: 12, hours: 12, minutes: 34, seconds: 56, milliseconds: 789 }, {});
       expect(date).toBeDefined();
       expect(date.getFullYear()).toBe(2016);
@@ -7531,6 +7591,46 @@ describe('QC.Dte', function () {
     it('called with string input and `"m/d/Y"` format should return expected date', function () {
       var date;
 
+      date = Dte.convert('03/12/0000', { formats: 'm/d/Y' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(0);
+      expect(date.getMonth()).toBe(2);
+      expect(date.getDate()).toBe(12);
+      expect(date.getHours()).toBe(0);
+      expect(date.getMinutes()).toBe(0);
+      expect(date.getSeconds()).toBe(0);
+      expect(date.getMilliseconds()).toBe(0);
+
+      date = Dte.convert('03/12/0001', { formats: 'm/d/Y' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(1);
+      expect(date.getMonth()).toBe(2);
+      expect(date.getDate()).toBe(12);
+      expect(date.getHours()).toBe(0);
+      expect(date.getMinutes()).toBe(0);
+      expect(date.getSeconds()).toBe(0);
+      expect(date.getMilliseconds()).toBe(0);
+
+      date = Dte.convert('03/12/0099', { formats: 'm/d/Y' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(99);
+      expect(date.getMonth()).toBe(2);
+      expect(date.getDate()).toBe(12);
+      expect(date.getHours()).toBe(0);
+      expect(date.getMinutes()).toBe(0);
+      expect(date.getSeconds()).toBe(0);
+      expect(date.getMilliseconds()).toBe(0);
+
+      date = Dte.convert('03/12/0100', { formats: 'm/d/Y' });
+      expect(date).toBeDefined();
+      expect(date.getFullYear()).toBe(100);
+      expect(date.getMonth()).toBe(2);
+      expect(date.getDate()).toBe(12);
+      expect(date.getHours()).toBe(0);
+      expect(date.getMinutes()).toBe(0);
+      expect(date.getSeconds()).toBe(0);
+      expect(date.getMilliseconds()).toBe(0);
+
       date = Dte.convert('03/12/1976', { formats: 'm/d/Y' });
       expect(date).toBeDefined();
       expect(date.getFullYear()).toBe(1976);
@@ -7998,6 +8098,46 @@ describe('QC.Dte', function () {
 
 
       // YYYY-MM-DDThh:mm:ss.sssTZD:
+
+      date = Dte.convert('0000-07-14T12:34:56.789-08:00', { formats: 'c' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(0);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('0001-07-14T12:34:56.789-08:00', { formats: 'c' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(1);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('0099-07-14T12:34:56.789-08:00', { formats: 'c' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(99);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('0100-07-14T12:34:56.789-08:00', { formats: 'c' });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(100);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
 
       date = Dte.convert('2016-07-14T12:34:56.789-08:00', { formats: 'c' });
       expect(date).toBeDefined();
@@ -10103,6 +10243,46 @@ describe('QC.Dte', function () {
 
       // YYYY-MM-DDThh:mm:ss.sssTZD:
 
+      date = Dte.convert('0000-07-14T12:34:56.789-08:00');
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(0);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('0001-07-14T12:34:56.789-08:00');
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(1);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('0099-07-14T12:34:56.789-08:00');
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(99);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
+      date = Dte.convert('0100-07-14T12:34:56.789-08:00');
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(100);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
       date = Dte.convert('2016-07-14T12:34:56.789-08:00');
       expect(date).toBeDefined();
       expect(date.getUTCFullYear()).toBe(2016);
@@ -11950,6 +12130,16 @@ describe('QC.Dte', function () {
 
       // ISO 8601 formatted dates are parsed automatically and do not fall back to the 'now' format.
 
+      date = Dte.convert('2016-07-14T12:34:56.789-08:00', { formats: ['Y-m-d', 'now', 'today'] });
+      expect(date).toBeDefined();
+      expect(date.getUTCFullYear()).toBe(2016);
+      expect(date.getUTCMonth()).toBe(6);
+      expect(date.getUTCDate()).toBe(14);
+      expect(date.getUTCHours()).toBe(20);
+      expect(date.getUTCMinutes()).toBe(34);
+      expect(date.getUTCSeconds()).toBe(56);
+      expect(date.getUTCMilliseconds()).toBe(789);
+
       date = Dte.convert('2016-07-14T12:34:56.789-08:00', { formats: ['Y-m-d', 'now'] });
       expect(date).toBeDefined();
       expect(date.getUTCFullYear()).toBe(2016);
@@ -11993,6 +12183,308 @@ describe('QC.Dte', function () {
   });
 
   describe('.diff', function () {
+
+    it('should throw a `TypeError` with invalid input', function () {
+      var date1, date2, unit;
+
+      date1 = new Date();
+      date2 = new Date();
+      unit = Dte.MILLISECONDS;
+
+      expect(function () {
+        Dte.diff(null, null, null);
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(null, null, unit);
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(null, null, 'invalid');
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(null, date1, null);
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(null, date1, unit);
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(null, date1, 'invalid');
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(date1, null, null);
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(date1, null, unit);
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(date1, null, 'invalid');
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(date1, date1, null);
+      }).toThrowError(TypeError);
+
+      expect(function () {
+        Dte.diff(date1, date1, 'invalid');
+      }).toThrowError(TypeError);
+    });
+
+    it('should calculate the difference of milliseconds between 2 dates', function () {
+      var guessedTz = guessCurrentTimezone(),
+          date1, date2;
+
+      if (!guessedTz) {
+        expect(true).toBe(false);
+      }
+
+      if (guessedTz.name == 'America/Los_Angeles') {
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946756801000, 480);
+        date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978379201000, 480);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 60 * 24 * 366);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
+        date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975700801000, 480); // After daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, (1000 * 60 * 60 * 24 * 183) + 3600000);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 60 * 24 * 30);
+
+        date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949435201000, 480); // Before daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, (1000 * 60 * 60 * 24 * 151) + -3600000);
+
+        // Due to daylight savings, one hour should be missing.
+        // Daylight savings starts on March 14th in 2010.
+        date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268553601000, 480);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268600401000, 420);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 840 + -3600000);
+
+        // Due to daylight savings, one more hour should have transpired.
+        // Daylight savings ends on Nov 7th in 2010.
+        date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289113200000, 420);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289167200000, 480);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 840 + 3600000);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946756800000, 480);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946756919000, 480);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 119000);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0, 9], 946756800009, 480);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59, 7], 946756919007, 480);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 119000 - 2);
+      }
+      else if (guessedTz.name == 'America/Denver') {
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946753201000, 420);
+        date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978375601000, 420);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 60 * 24 * 366);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
+        date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975697201000, 420); // After daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, (1000 * 60 * 60 * 24 * 183) + 3600000);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 60 * 24 * 30);
+
+        date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949431601000, 420); // Before daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, (1000 * 60 * 60 * 24 * 151) + -3600000);
+
+        // Due to daylight savings, one hour should be missing.
+        // Daylight savings starts on March 14th in 2010.
+        date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268550001000, 420);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268596801000, 360);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 840 + -3600000);
+
+        // Due to daylight savings, one more hour should have transpired.
+        // Daylight savings ends on Nov 7th in 2010.
+        date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289109600000, 360);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289163600000, 420);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 840 + 3600000);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946753200000, 420);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946753319000, 420);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 119000);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0, 9], 946753200009, 420);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59, 7], 946753319007, 420);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 119000 - 2);
+      }
+      else if (guessedTz.name == 'America/Chicago') {
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946749601000, 360);
+        date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978372001000, 360);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 60 * 24 * 366);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
+        date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975693601000, 360); // After daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, (1000 * 60 * 60 * 24 * 183) + 3600000);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 60 * 24 * 30);
+
+        date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949428001000, 360); // Before daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, (1000 * 60 * 60 * 24 * 151) + -3600000);
+
+        // Due to daylight savings, one hour should be missing.
+        // Daylight savings starts on March 14th in 2010.
+        date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268546401000, 360);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268593201000, 300);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 840 + -3600000);
+
+        // Due to daylight savings, one more hour should have transpired.
+        // Daylight savings ends on Nov 7th in 2010.
+        date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289106000000, 300);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289160000000, 360);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 1000 * 60 * 840 + 3600000);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946749600000, 360);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946749719000, 360);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 119000);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0, 9], 946749600009, 360);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59, 7], 946749719007, 360);
+        _diffAndExpect(date1, date2, Dte.MILLISECONDS, 119000 - 2);
+      }
+      // TODO: Add tests for other timezones.
+      else {
+        expect(true).toBe(false);
+      }
+    });
+
+    it('should calculate the difference of seconds between 2 dates', function () {
+      var guessedTz = guessCurrentTimezone(),
+          date1, date2;
+
+      if (!guessedTz) {
+        expect(true).toBe(false);
+      }
+
+      if (guessedTz.name == 'America/Los_Angeles') {
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946756801000, 480);
+        date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978379201000, 480);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 60 * 24 * 366);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
+        date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975700801000, 480); // After daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, (60 * 60 * 24 * 183) + 3600);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959886001000, 420); // During daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 60 * 24 * 30);
+
+        date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949435201000, 480); // Before daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962478001000, 420); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, (60 * 60 * 24 * 151) + -3600);
+
+        // Due to daylight savings, one hour should be missing.
+        // Daylight savings starts on March 14th in 2010.
+        date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268553601000, 480);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268600401000, 420);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 840 + -3600);
+
+        // Due to daylight savings, one more hour should have transpired.
+        // Daylight savings ends on Nov 7th in 2010.
+        date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289113200000, 420);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289167200000, 480);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 840 + 3600);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946756800000, 480);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946756919000, 480);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 119);
+      }
+      else if (guessedTz.name == 'America/Denver') {
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946753201000, 420);
+        date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978375601000, 420);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 60 * 24 * 366);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
+        date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975697201000, 420); // After daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, (60 * 60 * 24 * 183) + 3600);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959882401000, 360); // During daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 60 * 24 * 30);
+
+        date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949431601000, 420); // Before daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962474401000, 360); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, (60 * 60 * 24 * 151) + -3600);
+
+        // Due to daylight savings, one hour should be missing.
+        // Daylight savings starts on March 14th in 2010.
+        date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268550001000, 420);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268596801000, 360);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 840 + -3600);
+
+        // Due to daylight savings, one more hour should have transpired.
+        // Daylight savings ends on Nov 7th in 2010.
+        date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289109600000, 360);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289163600000, 420);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 840 + 3600);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946753200000, 420);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946753319000, 420);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 119);
+      }
+      else if (guessedTz.name == 'America/Chicago') {
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 1], 946749601000, 360);
+        date2 = createDateFromArray([2001, 0, 1, 12, 0, 1], 978372001000, 360);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 60 * 24 * 366);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
+        date2 = createDateFromArray([2000, 11, 1, 12, 0, 1], 975693601000, 360); // After daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, (60 * 60 * 24 * 183) + 3600);
+
+        date1 = createDateFromArray([2000, 5, 1, 12, 0, 1], 959878801000, 300); // During daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 60 * 24 * 30);
+
+        date1 = createDateFromArray([2000, 1, 1, 12, 0, 1], 949428001000, 360); // Before daylight savings.
+        date2 = createDateFromArray([2000, 6, 1, 12, 0, 1], 962470801000, 300); // During daylight savings.
+        _diffAndExpect(date1, date2, Dte.SECONDS, (60 * 60 * 24 * 151) + -3600);
+
+        // Due to daylight savings, one hour should be missing.
+        // Daylight savings starts on March 14th in 2010.
+        date1 = createDateFromArray([2010, 2, 14, 0, 0, 1], 1268546401000, 360);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 2, 14, 14, 0, 1], 1268593201000, 300);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 840 + -3600);
+
+        // Due to daylight savings, one more hour should have transpired.
+        // Daylight savings ends on Nov 7th in 2010.
+        date1 = createDateFromArray([2010, 10, 7, 0, 0, 0, 0], 1289106000000, 300);
+        // NOTE: The following date was choosen such that Phantom JS will create it correctly.
+        date2 = createDateFromArray([2010, 10, 7, 14, 0, 0, 0], 1289160000000, 360);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 60 * 840 + 3600);
+
+        date1 = createDateFromArray([2000, 0, 1, 12, 0, 0], 946749600000, 360);
+        date2 = createDateFromArray([2000, 0, 1, 12, 1, 59], 946749719000, 360);
+        _diffAndExpect(date1, date2, Dte.SECONDS, 119);
+      }
+      // TODO: Add tests for other timezones.
+      else {
+        expect(true).toBe(false);
+      }
+    });
 
     it('should calculate the difference of minutes between 2 dates', function () {
       var guessedTz = guessCurrentTimezone(),
@@ -12576,6 +13068,15 @@ describe('QC.Dte', function () {
 
       isValid = Dte.isValid(2001, 2, 28);
       expect(isValid).toBe(true);
+
+      isValid = Dte.isValid(100, 2, 29);
+      expect(isValid).toBe(false);
+
+      isValid = Dte.isValid(96, 2, 29);
+      expect(isValid).toBe(true);
+
+      isValid = Dte.isValid(0, 2, 29);
+      expect(isValid).toBe(true);
     });
 
     it('called with invalid date info should return `false`', function () {
@@ -12609,6 +13110,9 @@ describe('QC.Dte', function () {
       expect(isValid).toBe(false);
 
       isValid = Dte.isValid(2000, 3, 12, 2, 75, 0);
+      expect(isValid).toBe(false);
+
+      isValid = Dte.isValid(99, 2, 29);
       expect(isValid).toBe(false);
     });
 

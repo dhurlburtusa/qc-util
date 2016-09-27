@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 Nothing yet.
 
+## [0.1.0] - 2016-09-23
+
+### Fixed
+
+- Issue with dates on Feb 29th with year < 100.
+
 ## [0.1.0] - 2016-09-09
 
 ### Added
