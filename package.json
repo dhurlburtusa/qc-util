@@ -16,6 +16,10 @@
     "typeOf",
     "qc"
   ],
+  "homepage": "https://github.com/dhurlburtusa/qc-util#readme",
+  "bugs": {
+    "url": "https://github.com/dhurlburtusa/qc-util/issues"
+  },
   "license": "MIT",
   "files": [
     "index.js",
